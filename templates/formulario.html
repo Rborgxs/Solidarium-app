@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Criar Formulário</title>
+
+<!-- Favicon usando o link do Canva -->
+<link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:800/quality:100/uri:ifs%3A%2F%2FM%2F63a727af-513e-4c45-80e8-a5bcfa5f6829/watermark:F/width:800?csig=AAAAAAAAAAAAAAAAAAAAADgsJ5XYdIN-mpbn2ZnMo9spnnusBvCqrT2ZUznQRKqi&exp=1763952387&osig=AAAAAAAAAAAAAAAAAAAAANm6KhfDs4hd6qSBPL2E2dzoGaQRGfFU2VC6CXkg4cpe&signer=media-rpc&x-canva-quality=screen" type="image/png">
+
+<style>
+@font-face {
+    font-family: ItauText-Regular;
+    src: url('ItauText_Rg.ttf') format('truetype');
+}
+* { box-sizing: border-box; font-family: ItauText-Regular, Myriad Pro, Arial, sans-serif; }
+
+body {
+    margin: 0;
+    background: #f0f2f5;
+    color: #111827;
+    padding: 24px;
+}
+
+.container { max-width: 900px; margin: auto; }
+
+h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #036f9c;
+}
+
+.card {
+    background: #fff;
+    padding: 32px;
+    border-radius: 14px;
+    border: 1px solid #0097b2;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+label { font-weight: 600; margin-top: 12px; display: block; color: #036f9c; }
+input[type=text], input[type=number], textarea, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border: 1px solid #0097b2;
+    border-radius: 10px;
+    font-size: 15px;
+    color: #111827;
+    transition:0.2s;
+}
+input:focus, textarea:focus, select:focus {
+    outline:none;
+    border-color: #036f9c;
+    box-shadow:0 0 6px rgba(3,111,156,0.2);
+    background:#fff;
+}
+
+fieldset {
+    border: 2px solid #0097b2;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+    background: #fff;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+    transition:0.2s;
+}
+fieldset:hover { border-color:#036f9c; box-shadow:0 4px 12px rgba(3,111,156,0.15); }
+
+legend {
+    font-weight:bold;
+    padding:6px 12px;
+    background: linear-gradient(135deg,#0097b2,#036f9c);
+    color:white;
+    border-radius:6px;
+    font-size:16px;
+}
+
+button {
+    margin-top:24px;
+    padding:14px 22px;
+    background: linear-gradient(135deg,#0097b2,#036f9c);
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition: all 0.3s ease;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+}
+button:hover {
+    background: linear-gradient(135deg,#036f9c,#0097b2);
+    transform:scale(1.03);
+    box-shadow:0 8px 20px rgba(0,0,0,0.25);
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+    <h1>Criar Formulário</h1>
+
+    <div class="card">
+        <form method="post">
+
+            {% if qtd_perguntas == 0 %}
+                <label>Título do Formulário</label>
+                <input type="text" name="titulo" value="{{ titulo }}" required>
+
+                <label>Quantidade de Perguntas</label>
+                <input type="number" min="1" name="qtd_perguntas" required>
+
+                <button type="submit" name="confirm_qtd">Continuar</button>
+
+            {% else %}
+                <input type="hidden" name="titulo" value="{{ titulo }}">
+                <input type="hidden" name="qtd_perguntas" value="{{ qtd_perguntas }}">
+
+                {% for i in range(1, qtd_perguntas + 1) %}
+                <fieldset>
+                    <legend>Pergunta {{ i }}</legend>
+
+                    <label>Texto da Pergunta</label>
+                    <input type="text" name="pergunta_{{ i }}" required>
+
+                    <label>Tipo</label>
+                    <select name="tipo_{{ i }}">
+                        <option value="subjetiva">Subjetiva</option>
+                        <option value="objetiva">Objetiva (Múltipla escolha)</option>
+                    </select>
+
+                    <label>Opções (uma por linha, se objetiva)</label>
+                    <textarea name="opcoes_{{ i }}" rows="3"></textarea>
+
+                    <label style="margin-top:10px;">
+                        <input type="checkbox" name="obrigatoria_{{ i }}">
+                        Obrigatória
+                    </label>
+                </fieldset>
+                {% endfor %}
+
+                <button type="submit" name="submit_form">Salvar Formulário</button>
+
+            {% endif %}
+
+        </form>
+    </div>
+</div>
+</body>
+</html>

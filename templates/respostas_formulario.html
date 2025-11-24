@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Responder Formulário</title>
+
+<!-- Favicon usando o link do Canva -->
+<link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:800/quality:100/uri:ifs%3A%2F%2FM%2F63a727af-513e-4c45-80e8-a5bcfa5f6829/watermark:F/width:800?csig=AAAAAAAAAAAAAAAAAAAAADgsJ5XYdIN-mpbn2ZnMo9spnnusBvCqrT2ZUznQRKqi&exp=1763952387&osig=AAAAAAAAAAAAAAAAAAAAANm6KhfDs4hd6qSBPL2E2dzoGaQRGfFU2VC6CXkg4cpe&signer=media-rpc&x-canva-quality=screen" type="image/png">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@font-face {
+    font-family: ItauText-Regular;
+    src: url('ItauText_Rg.ttf') format('truetype');
+}
+* { box-sizing: border-box; font-family: ItauText-Regular, Myriad Pro, Arial, sans-serif; }
+
+:root {
+    --bg:#f0f2f5;
+    --card-bg:#ffffffcc;
+    --card-border:#0097b2;
+    --text:#111827;
+    --primary:#0097b2;
+    --primary-hover:#036f9c;
+    --input-bg:#fff;
+    --input-border:#d1d5db;
+    --required:#e11d48;
+}
+
+body {
+    margin:0;
+    padding:40px 24px 24px;
+    background:var(--bg);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+}
+
+.wrap {
+    width:100%;
+    max-width:800px;
+    background:var(--card-bg);
+    border-radius:20px;
+    border:2px solid var(--card-border);
+    backdrop-filter:blur(15px);
+    -webkit-backdrop-filter:blur(15px);
+    padding:40px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.12);
+}
+
+h1 {
+    font-size:26px;
+    font-weight:800;
+    color:var(--primary);
+    text-align:center;
+    margin-bottom:30px;
+}
+
+form fieldset {
+    margin-top:20px;
+    padding:20px;
+    border:1px solid var(--input-border);
+    border-radius:12px;
+    opacity:0;
+    transform:translateY(20px);
+    animation:fadeIn 0.6s ease forwards;
+}
+
+form fieldset:nth-child(1) { animation-delay:0.1s; }
+form fieldset:nth-child(2) { animation-delay:0.2s; }
+form fieldset:nth-child(3) { animation-delay:0.3s; }
+form fieldset:nth-child(4) { animation-delay:0.4s; }
+form fieldset:nth-child(5) { animation-delay:0.5s; }
+
+@keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
+
+legend {
+    font-weight:bold;
+    font-size:18px;
+    color:var(--primary);
+}
+
+label {
+    display:block;
+    margin-top:12px;
+    font-weight:600;
+    color:var(--text);
+}
+
+label.required::after {
+    content:"*";
+    color:var(--required);
+    margin-left:4px;
+}
+
+input[type=text], textarea, select {
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border-radius:8px;
+    border:1px solid var(--input-border);
+    background:var(--input-bg);
+    font-size:14px;
+    transition:all 0.3s ease;
+}
+
+input[type=text]:focus, textarea:focus, select:focus {
+    border-color:var(--primary);
+    box-shadow:0 0 6px rgba(0,151,178,0.3);
+    outline:none;
+}
+
+textarea { resize:vertical; min-height:60px; }
+
+.checkbox-group { display:flex; flex-direction:column; }
+
+.checkbox-group label {
+    display:flex;
+    align-items:center;
+    margin-top:8px;
+    cursor:pointer;
+    position:relative;
+    padding-left:28px;
+    transition:all 0.3s ease;
+}
+
+.checkbox-group input[type=checkbox] { position:absolute; opacity:0; cursor:pointer; }
+
+.checkbox-group label::before {
+    content:'';
+    position:absolute;
+    left:0;
+    top:2px;
+    width:20px;
+    height:20px;
+    border:2px solid var(--primary);
+    border-radius:4px;
+    background:#fff;
+    transition:all 0.3s ease;
+}
+
+.checkbox-group input[type=checkbox]:checked + label::before {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.checkbox-group label::after {
+    content:"\f00c";
+    font-family:"Font Awesome 6 Free";
+    font-weight:900;
+    position:absolute;
+    left:3px;
+    top:-1px;
+    color:#fff;
+    font-size:14px;
+    opacity:0;
+    transition:all 0.3s ease;
+}
+
+.checkbox-group input[type=checkbox]:checked + label::after {
+    opacity:1;
+}
+
+button {
+    margin-top:24px;
+    padding:14px 30px;
+    background:var(--primary);
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    font-weight:bold;
+    font-size:16px;
+    cursor:pointer;
+    transition:all 0.3s ease, transform 0.2s;
+    display:block;
+    width:100%;
+    box-shadow:0 4px 12px rgba(0,151,178,0.25);
+}
+
+button:hover {
+    background:var(--primary-hover);
+    transform:translateY(-2px);
+    box-shadow:0 6px 18px rgba(0,0,0,0.25);
+}
+
+@media (min-width:600px) {
+    button { width:auto; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+    <h1>{{ formulario.titulo }}</h1>
+
+    <form method="post">
+        {% for p in formulario.perguntas %}
+            {% set idx = loop.index %}
+            <fieldset>
+                <legend>Pergunta {{ idx }}</legend>
+
+                <label class="{% if p.obrigatoria %}required{% endif %}">{{ p.texto }}</label>
+
+                {% if p.tipo == "objetiva" %}
+                <div class="checkbox-group">
+                    {% for opcao in p.opcoes %}
+                    <input type="checkbox" id="p{{ idx }}o{{ loop.index }}" name="pergunta_{{ idx }}" value="{{ opcao }}">
+                    <label for="p{{ idx }}o{{ loop.index }}">{{ opcao }}</label>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <textarea name="pergunta_{{ idx }}"></textarea>
+                {% endif %}
+            </fieldset>
+        {% endfor %}
+
+        <button type="submit">Enviar Resposta</button>
+    </form>
+</div>
+</body>
+</html>

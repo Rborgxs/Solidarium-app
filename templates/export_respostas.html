@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Respostas Exportadas</title>
+
+<!-- Favicon usando o link do Canva -->
+<link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:800/quality:100/uri:ifs%3A%2F%2FM%2F63a727af-513e-4c45-80e8-a5bcfa5f6829/watermark:F/width:800?csig=AAAAAAAAAAAAAAAAAAAAADgsJ5XYdIN-mpbn2ZnMo9spnnusBvCqrT2ZUznQRKqi&exp=1763952387&osig=AAAAAAAAAAAAAAAAAAAAANm6KhfDs4hd6qSBPL2E2dzoGaQRGfFU2VC6CXkg4cpe&signer=media-rpc&x-canva-quality=screen" type="image/png">
+
+<style>
+@font-face {
+    font-family: ItauText-Regular;
+    src: url('ItauText_Rg.ttf') format('truetype');
+}
+* { box-sizing: border-box; font-family: ItauText-Regular, Myriad Pro, Arial, sans-serif; }
+
+body {
+    background: #f0f2f5;
+    margin: 0;
+    padding: 24px;
+    color: #111827;
+}
+
+.wrap {
+    max-width: 1000px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 24px;
+    border-radius: 14px;
+    border:1px solid #0097b2;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+h1 {
+    margin-bottom:20px;
+    color:#036f9c;
+    text-align:center;
+}
+
+table {
+    width:100%;
+    border-collapse: collapse;
+    margin-top:16px;
+    font-size:15px;
+}
+
+th, td {
+    padding:12px;
+    text-align:left;
+    border-bottom:1px solid #e6eef6;
+    transition:0.2s;
+}
+
+th {
+    background: linear-gradient(135deg,#0097b2,#036f9c);
+    color:white;
+    font-weight:600;
+}
+
+tr:hover {
+    background: rgba(3,111,156,0.05);
+}
+
+.no-resp {
+    text-align:center;
+    padding:20px;
+    color:#9fb3c8;
+    font-style:italic;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+    <h1>Respostas do Formulário: {{ formulario.titulo }}</h1>
+
+    {% if respostas %}
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                {% for i, q in enumerate(formulario.perguntas, start=1) %}
+                    <th>Pergunta {{ i }}: {{ q.texto }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for idx, resp in enumerate(respostas, start=1) %}
+            <tr>
+                <td>{{ idx }}</td>
+                {% for r in resp %}
+                    <td>{{ r }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div class="no-resp">Nenhuma resposta enviada ainda.</div>
+    {% endif %}
+</div>
+</body>
+</html>

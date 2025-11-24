@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editar Formulário</title>
+
+<!-- Favicon usando o link do Canva -->
+<link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:800/quality:100/uri:ifs%3A%2F%2FM%2F63a727af-513e-4c45-80e8-a5bcfa5f6829/watermark:F/width:800?csig=AAAAAAAAAAAAAAAAAAAAADgsJ5XYdIN-mpbn2ZnMo9spnnusBvCqrT2ZUznQRKqi&exp=1763952387&osig=AAAAAAAAAAAAAAAAAAAAANm6KhfDs4hd6qSBPL2E2dzoGaQRGfFU2VC6CXkg4cpe&signer=media-rpc&x-canva-quality=screen" type="image/png">
+
+<style>
+    @font-face {
+        font-family: ItauText-Regular;
+        src: url('ItauText_Rg.ttf') format('truetype');
+    }
+    * { box-sizing: border-box; font-family: ItauText-Regular, Myriad Pro, Arial, sans-serif; }
+    body { background:#f0f2f5; padding:24px; color:#111827; }
+    .container { max-width:900px; margin:auto; }
+    h1 { font-size:28px; font-weight:800; margin-bottom:20px; color:#036f9c; text-align:center; }
+    .card {
+        background:white;
+        padding:32px;
+        border-radius:14px;
+        border:1px solid #0097b2;
+        box-shadow:0 20px 40px rgba(0,0,0,0.08);
+    }
+    label { margin-top:14px; font-weight:600; display:block; color:#036f9c; }
+    input, textarea, select {
+        width:100%;
+        padding:12px;
+        margin-top:6px;
+        border-radius:10px;
+        border:1px solid #0097b2;
+        font-size:15px;
+        color:#111827;
+        transition:0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+        outline:none;
+        border-color:#036f9c;
+        box-shadow:0 0 6px rgba(3,111,156,0.2);
+    }
+    textarea { resize: vertical; }
+    fieldset {
+        margin-top:18px;
+        padding:20px;
+        border-radius:12px;
+        border:2px solid #0097b2;
+        background:#fff;
+        box-shadow:0 2px 10px rgba(0,0,0,0.05);
+        transition:0.2s;
+    }
+    fieldset:hover { border-color:#036f9c; box-shadow:0 4px 12px rgba(3,111,156,0.15); }
+    legend {
+        font-weight:bold;
+        padding:6px 12px;
+        background: linear-gradient(135deg,#0097b2,#036f9c);
+        color:white;
+        border-radius:6px;
+        font-size:17px;
+    }
+    button {
+        margin-top:24px;
+        padding:14px 20px;
+        background: linear-gradient(135deg,#0097b2,#036f9c);
+        color:white;
+        border-radius:10px;
+        border:none;
+        font-size:16px;
+        font-weight:600;
+        cursor:pointer;
+        transition: all 0.3s ease;
+        box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+    }
+    button:hover {
+        background: linear-gradient(135deg,#036f9c,#0097b2);
+        transform:scale(1.03);
+        box-shadow:0 8px 20px rgba(0,0,0,0.25);
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Editar Formulário</h1>
+
+    <div class="card">
+        <form method="post">
+
+            <label>Título</label>
+            <input type="text" name="titulo" value="{{ titulo }}" required>
+
+            {% for idx, p in enumerate(perguntas, start=1) %}
+            <fieldset>
+                <legend>Pergunta {{ idx }}</legend>
+
+                <label>Texto</label>
+                <input type="text" name="pergunta_{{ idx }}" value="{{ p.texto }}" required>
+
+                <label>Tipo</label>
+                <select name="tipo_{{ idx }}">
+                    <option value="subjetiva" {% if p.tipo=='subjetiva' %}selected{% endif %}>Subjetiva</option>
+                    <option value="objetiva" {% if p.tipo=='objetiva' %}selected{% endif %}>Objetiva</option>
+                </select>
+
+                <label>Opções (uma por linha)</label>
+                <textarea name="opcoes_{{ idx }}">{{ p.opcoes | join('\n') }}</textarea>
+
+                <label>
+                    <input type="checkbox" name="obrigatoria_{{ idx }}" {% if p.obrigatoria %}checked{% endif %}>
+                    Obrigatória
+                </label>
+            </fieldset>
+            {% endfor %}
+
+            <button type="submit">Salvar Alterações</button>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

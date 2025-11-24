@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Criar Formulário</title>
+
+<!-- Favicon usando o link do Canva -->
+<link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:800/quality:100/uri:ifs%3A%2F%2FM%2F63a727af-513e-4c45-80e8-a5bcfa5f6829/watermark:F/width:800?csig=AAAAAAAAAAAAAAAAAAAAADgsJ5XYdIN-mpbn2ZnMo9spnnusBvCqrT2ZUznQRKqi&exp=1763952387&osig=AAAAAAAAAAAAAAAAAAAAANm6KhfDs4hd6qSBPL2E2dzoGaQRGfFU2VC6CXkg4cpe&signer=media-rpc&x-canva-quality=screen" type="image/png">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    @font-face {
+        font-family: ItauText-Regular;
+        src: url('ItauText_Rg.ttf') format('truetype');
+    }
+    * {
+        box-sizing: border-box;
+        font-family: ItauText-Regular, Myriad Pro, Arial, sans-serif;
+    }
+    body {
+        margin:0;
+        padding:20px;
+        color:#111827;
+        background: url('/static/bg.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
+    h1, h3 {
+        text-align:center;
+        color:#036f9c;
+    }
+    form {
+        max-width:900px;
+        margin:auto;
+        padding:30px;
+        background: rgba(255,255,255,0.95);
+        border-radius:12px;
+        box-shadow:0 5px 20px rgba(0,0,0,0.1);
+    }
+    label {
+        display:block;
+        margin-top:14px;
+        font-weight:600;
+        color:#036f9c;
+    }
+    input, select, textarea {
+        width:100%;
+        padding:12px;
+        margin-top:6px;
+        border-radius:8px;
+        border:1px solid #0097b2;
+        font-size:15px;
+        box-sizing:border-box;
+        transition:0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+        outline:none;
+        border-color:#036f9c;
+        box-shadow:0 0 6px rgba(3,111,156,0.3);
+    }
+    textarea { resize: vertical; }
+    fieldset {
+        background:#fff;
+        border:2px solid #0097b2;
+        padding:20px;
+        margin-top:25px;
+        border-radius:10px;
+        transition:0.2s;
+    }
+    fieldset:hover {
+        border-color:#036f9c;
+        box-shadow:0 0 8px rgba(3,111,156,0.2);
+    }
+    legend {
+        font-size:17px;
+        font-weight:bold;
+        padding:6px 12px;
+        background: linear-gradient(135deg,#0097b2,#036f9c);
+        color:white;
+        border-radius:6px;
+    }
+    .buttons {
+        display:flex;
+        gap:10px;
+        margin-top:20px;
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+    .buttons button, .fullButton {
+        flex:1;
+        max-width:300px;
+        padding:14px;
+        background: linear-gradient(135deg,#0097b2,#036f9c);
+        color:white;
+        border:none;
+        border-radius:10px;
+        font-size:16px;
+        font-weight:600;
+        cursor:pointer;
+        transition:all 0.3s ease;
+        box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+    }
+    .buttons button:hover, .fullButton:hover {
+        background: linear-gradient(135deg,#036f9c,#0097b2);
+        transform:scale(1.03);
+        box-shadow:0 8px 20px rgba(0,0,0,0.25);
+    }
+    .blocoOpcoes {
+        margin-top:12px;
+        padding:12px;
+        border-left:4px solid #0097b2;
+        background:#e6f6fa;
+        border-radius:6px;
+        transition:0.2s;
+    }
+    @media (max-width:600px){
+        form { padding:20px; }
+    }
+</style>
+</head>
+<body>
+<h1>Criador de Pesquisa de Qualidade</h1>
+
+<form method="post">
+    <label>Título do Formulário:</label>
+    <input type="text" name="titulo" value="{{ titulo }}" required>
+
+    {% if qtd_perguntas == 0 %}
+        <fieldset>
+            <legend>Configuração Inicial</legend>
+            <label>Quantidade de Perguntas:</label>
+            <input type="number" name="qtd_perguntas" min="1" max="100" value="{{ qtd_perguntas }}" required>
+            <div class="buttons" style="margin-top:15px;">
+                <button type="submit" name="confirm_qtd" class="fullButton">Confirmar Quantidade de Perguntas</button>
+            </div>
+        </fieldset>
+    {% else %}
+        <h3>Preencha as perguntas</h3>
+        {% for i in range(1, qtd_perguntas + 1) %}
+            <fieldset>
+                <legend>Pergunta {{ i }}</legend>
+                <label>Texto da pergunta:</label>
+                <input type="text" name="pergunta_{{ i }}" required>
+                <label>Tipo:</label>
+                <select name="tipo_{{ i }}" class="tipoPergunta" data-target="opcoes_{{ i }}">
+                    <option value="subjetiva">Subjetiva (texto livre)</option>
+                    <option value="objetiva">Objetiva (múltipla escolha)</option>
+                </select>
+                <div id="opcoes_{{ i }}" class="blocoOpcoes" style="display:none;">
+                    <label>Opções (uma por linha):</label>
+                    <textarea name="opcoes_{{ i }}" rows="4"></textarea>
+                </div>
+            </fieldset>
+        {% endfor %}
+        <div class="buttons">
+            <button type="submit" name="submit_form">Gerar Formulário</button>
+            <button type="submit" formtarget="_blank" name="submit_form">Abrir em Nova Aba</button>
+        </div>
+    {% endif %}
+</form>
+
+<script>
+function atualizarExibicao() {
+    document.querySelectorAll(".tipoPergunta").forEach(function(select){
+        const idAlvo = select.dataset.target;
+        const bloco = document.getElementById(idAlvo);
+        bloco.style.display = select.value === "objetiva" ? "block" : "none";
+    });
+}
+atualizarExibicao();
+document.querySelectorAll(".tipoPergunta").forEach(select => select.addEventListener("change", atualizarExibicao));
+</script>
+</body>
+</html>

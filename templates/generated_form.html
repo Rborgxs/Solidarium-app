@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formulários Criados</title>
+
+<!-- Favicon usando o link do Canva -->
+<link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:800/quality:100/uri:ifs%3A%2F%2FM%2F63a727af-513e-4c45-80e8-a5bcfa5f6829/watermark:F/width:800?csig=AAAAAAAAAAAAAAAAAAAAADgsJ5XYdIN-mpbn2ZnMo9spnnusBvCqrT2ZUznQRKqi&exp=1763952387&osig=AAAAAAAAAAAAAAAAAAAAANm6KhfDs4hd6qSBPL2E2dzoGaQRGfFU2VC6CXkg4cpe&signer=media-rpc&x-canva-quality=screen" type="image/png">
+
+<style>
+@font-face {
+    font-family: ItauText-Regular;
+    src: url('ItauText_Rg.ttf') format('truetype');
+}
+* { box-sizing: border-box; font-family: ItauText-Regular, Myriad Pro, Arial, sans-serif; }
+
+body {
+    margin:0;
+    padding:24px;
+    background:#f0f2f5;
+    color:#111827;
+}
+
+.container { max-width:900px; margin:auto; }
+
+h1 {
+    font-size:28px;
+    font-weight:800;
+    margin-bottom:20px;
+    text-align:center;
+    color:#036f9c;
+}
+
+.card {
+    background:#fff;
+    padding:28px;
+    border-radius:14px;
+    border:2px solid #0097b2;
+    box-shadow:0 20px 40px rgba(0,0,0,0.08);
+}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+    margin-top:16px;
+}
+th, td {
+    text-align:left;
+    padding:14px;
+    border-bottom:1px solid #0097b2;
+}
+th {
+    font-weight:700;
+    background:#e6f2f7;
+    color:#036f9c;
+}
+
+tr:hover { background: rgba(3,111,156,0.05); }
+
+.btn {
+    padding:8px 14px;
+    font-size:14px;
+    font-weight:600;
+    border-radius:8px;
+    text-decoration:none;
+    display:inline-block;
+    transition:0.25s;
+    color:white;
+}
+.edit { background: linear-gradient(135deg,#0097b2,#036f9c); }
+.edit:hover { background: linear-gradient(135deg,#036f9c,#0097b2); transform:scale(1.05); }
+
+.respond { background: linear-gradient(135deg,#10b981,#059669); }
+.respond:hover { transform:scale(1.05); }
+
+.export { background: linear-gradient(135deg,#f59e0b,#d97706); color:black; }
+.export:hover { transform:scale(1.05); }
+
+.delete { background: linear-gradient(135deg,#ef4444,#b91c1c); }
+.delete:hover { transform:scale(1.05); }
+
+.new-btn {
+    background: linear-gradient(135deg,#0097b2,#036f9c);
+    padding:12px 18px;
+    margin-top:20px;
+    display:inline-block;
+    border-radius:10px;
+    color:white;
+    font-weight:700;
+    text-decoration:none;
+    transition:0.25s;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+.new-btn:hover {
+    background: linear-gradient(135deg,#036f9c,#0097b2);
+    transform: scale(1.03);
+    box-shadow:0 8px 20px rgba(0,0,0,0.25);
+}
+
+.no-form {
+    text-align:center;
+    color:#4b5563;
+    padding:20px;
+    font-size:16px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Formulários Criados</h1>
+    <div class="card">
+
+        {% if formularios %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Perguntas</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id, f in formularios.items() %}
+                <tr>
+                    <td>{{ id }}</td>
+                    <td>{{ f.titulo }}</td>
+                    <td>{{ f.perguntas|length }}</td>
+                    <td>
+                        <a class="btn edit" href="{{ url_for('editar_formulario', formulario_id=id) }}">Editar</a>
+                        <a class="btn respond" href="{{ url_for('responder_formulario', formulario_id=id) }}">Responder</a>
+
+                        <a class="btn export" href="{{ url_for('exportar_respostas', formulario_id=id, formato='csv') }}">CSV</a>
+                        <a class="btn export" href="{{ url_for('exportar_respostas', formulario_id=id, formato='json') }}">JSON</a>
+
+                        <a class="btn delete" href="{{ url_for('excluir_formulario', formulario_id=id) }}" onclick="return confirm('Deseja excluir este formulário?')">Excluir</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+            <div class="no-form">Nenhum formulário criado ainda.</div>
+        {% endif %}
+
+        <a href="{{ url_for('criar_formulario') }}" class="new-btn">Criar Novo Formulário</a>
+    </div>
+</div>
+</body>
+</html>
