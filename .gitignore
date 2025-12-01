@@ -91,3 +91,6 @@ node_modules/
 *~
 *.swp
 *.swo
+
+# Ignorar o __init__ gerado em models conforme solicitado
+models/__init__.py

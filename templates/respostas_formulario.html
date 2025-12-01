@@ -193,8 +193,20 @@ button:hover {
 <body>
 <div class="wrap">
     <h1>{{ formulario.titulo }}</h1>
+    {% if error %}
+    <div style="background:#fee2e2;color:#9b1c1c;padding:12px;border-radius:8px;margin-bottom:12px;font-weight:700;">{{ error }}</div>
+    {% endif %}
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
+        <fieldset>
+            <legend>Dados do Respondente</legend>
+            <label class="required">Nome</label>
+            <input type="text" name="nome" required>
+
+            <label>CPF</label>
+            <input type="text" name="cpf" placeholder="000.000.000-00" required>
+        </fieldset>
+
         {% for p in formulario.perguntas %}
             {% set idx = loop.index %}
             <fieldset>
@@ -209,6 +221,8 @@ button:hover {
                     <label for="p{{ idx }}o{{ loop.index }}">{{ opcao }}</label>
                     {% endfor %}
                 </div>
+                {% elif p.tipo == 'imagem' %}
+                <input type="file" name="pergunta_{{ idx }}_file" accept="image/*">
                 {% else %}
                 <textarea name="pergunta_{{ idx }}"></textarea>
                 {% endif %}

@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Formulários Criados</title>
+<title>Formulários</title>
 
-<!-- Favicon usando o link do Canva -->
 <link rel="icon" href="https://media.canva.com/v2/image-resize/format:PNG/height:800/quality:100/uri:ifs%3A%2F%2FM%2F63a727af-513e-4c45-80e8-a5bcfa5f6829/watermark:F/width:800?csig=AAAAAAAAAAAAAAAAAAAAADgsJ5XYdIN-mpbn2ZnMo9spnnusBvCqrT2ZUznQRKqi&exp=1763952387&osig=AAAAAAAAAAAAAAAAAAAAANm6KhfDs4hd6qSBPL2E2dzoGaQRGfFU2VC6CXkg4cpe&signer=media-rpc&x-canva-quality=screen" type="image/png">
 
 <style>
@@ -59,26 +58,37 @@ th {
 tr:hover { background: rgba(3,111,156,0.05); }
 
 .btn {
-    padding:8px 14px;
+    padding:10px 16px;
     font-size:14px;
     font-weight:600;
     border-radius:8px;
     text-decoration:none;
     display:inline-block;
-    transition:0.25s;
+    transition:all 0.3s ease;
     color:white;
+    border:none;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
 }
+.btn:hover {
+    box-shadow:0 8px 20px rgba(0,0,0,0.25);
+    transform:translateY(-2px);
+}
+
 .edit { background: linear-gradient(135deg,#0097b2,#036f9c); }
-.edit:hover { background: linear-gradient(135deg,#036f9c,#0097b2); transform:scale(1.05); }
+.edit:hover { background: linear-gradient(135deg,#036f9c,#0097b2); }
 
 .respond { background: linear-gradient(135deg,#10b981,#059669); }
-.respond:hover { transform:scale(1.05); }
+.respond:hover { background: linear-gradient(135deg,#059669,#10b981); }
 
 .export { background: linear-gradient(135deg,#f59e0b,#d97706); color:black; }
-.export:hover { transform:scale(1.05); }
+.export:hover { background: linear-gradient(135deg,#d97706,#f59e0b); }
 
 .delete { background: linear-gradient(135deg,#ef4444,#b91c1c); }
-.delete:hover { transform:scale(1.05); }
+.delete:hover { background: linear-gradient(135deg,#b91c1c,#ef4444); }
+
+.visualizar { background: linear-gradient(135deg,#3b82f6,#1d4ed8); }
+.visualizar:hover { background: linear-gradient(135deg,#1d4ed8,#3b82f6); }
 
 .new-btn {
     background: linear-gradient(135deg,#0097b2,#036f9c);
@@ -131,11 +141,12 @@ tr:hover { background: rgba(3,111,156,0.05); }
                     <td>
                         <a class="btn edit" href="{{ url_for('editar_formulario', formulario_id=id) }}">Editar</a>
                         <a class="btn respond" href="{{ url_for('responder_formulario', formulario_id=id) }}">Responder</a>
-
                         <a class="btn export" href="{{ url_for('exportar_respostas', formulario_id=id, formato='csv') }}">CSV</a>
                         <a class="btn export" href="{{ url_for('exportar_respostas', formulario_id=id, formato='json') }}">JSON</a>
-
-                        <a class="btn delete" href="{{ url_for('excluir_formulario', formulario_id=id) }}" onclick="return confirm('Deseja excluir este formulário?')">Excluir</a>
+                        <a class="btn visualizar" href="{{ url_for('visualizar_respostas', formulario_id=id) }}">Visualizar</a>
+                        <form method="post" action="{{ url_for('excluir_formulario', formulario_id=id) }}" style="display:inline">
+                            <button class="btn delete" type="submit" onclick="return confirm('Deseja excluir este formulário?')">Excluir</button>
+                        </form>
                     </td>
                 </tr>
             {% endfor %}

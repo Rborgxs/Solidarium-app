@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visualizar Respostas</title>
+<style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: #f0f2f5; padding: 24px; color: #111827; margin: 0; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 28px;
+        background: white;
+        padding: 24px;
+        border-radius: 14px;
+        border: 1px solid #0097b2;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    h1 { 
+        font-size: 28px; 
+        font-weight: 800; 
+        color: #036f9c; 
+        margin: 0;
+    }
+    .header a {
+        padding: 10px 18px;
+        background: linear-gradient(135deg, #0097b2, #036f9c);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+    .header a:hover {
+        background: linear-gradient(135deg, #036f9c, #0097b2);
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(3, 111, 156, 0.3);
+    }
+    .card {
+        background: white;
+        padding: 24px;
+        border-radius: 14px;
+        border: 1px solid #0097b2;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        box-shadow: 0 4px 16px rgba(0, 151, 178, 0.15);
+        border-color: #036f9c;
+    }
+    .client-info {
+        display: flex;
+        gap: 24px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid #e5e7eb;
+        margin-bottom: 20px;
+    }
+    .client-field {
+        display: flex;
+        flex-direction: column;
+    }
+    .client-label {
+        font-weight: 600;
+        color: #036f9c;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+    .client-value {
+        color: #111827;
+        font-size: 16px;
+        font-weight: 500;
+    }
+    .responses-group {
+        display: grid;
+        gap: 16px;
+    }
+    .response {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 16px;
+        background: #f9fafb;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        transition: all 0.2s ease;
+    }
+    .response:hover {
+        background: #f3f4f6;
+        border-color: #0097b2;
+    }
+    .response.with-image {
+        align-items: center;
+    }
+    .thumb {
+        width: 160px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 2px solid #0097b2;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(0, 151, 178, 0.2);
+    }
+    .response-content {
+        flex: 1;
+    }
+    .response-label {
+        font-weight: 700;
+        color: #036f9c;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+    }
+    .response-value {
+        color: #374151;
+        font-size: 15px;
+        line-height: 1.5;
+        word-break: break-word;
+    }
+    .response-link {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 8px 14px;
+        background: linear-gradient(135deg, #0097b2, #036f9c);
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+    .response-link:hover {
+        background: linear-gradient(135deg, #036f9c, #0097b2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(3, 111, 156, 0.3);
+    }
+    .empty-state {
+        text-align: center;
+        padding: 48px 24px;
+        color: #6b7280;
+    }
+    .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+    }
+    .empty-state-text {
+        font-size: 16px;
+        font-weight: 500;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Respostas — {{ formulario.titulo }}</h1>
+        <a href="{{ url_for('listar_formularios') }}">← Voltar</a>
+    </div>
+
+    {% if not entries %}
+        <div class="card">
+            <div class="empty-state">
+                <div class="empty-state-icon">📋</div>
+                <div class="empty-state-text">Nenhuma resposta enviada ainda.</div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% for e in entries %}
+        <div class="card">
+            <div class="client-info">
+                <div class="client-field">
+                    <div class="client-label">Nome</div>
+                    <div class="client-value">{{ e.cliente.nome or '—' }}</div>
+                </div>
+                <div class="client-field">
+                    <div class="client-label">CPF</div>
+                    <div class="client-value">{{ e.cliente.cpf or '—' }}</div>
+                </div>
+            </div>
+
+            <div class="responses-group">
+                {% for k, v in e.respostas.items() %}
+                    {% if v is mapping and "caminho" in v %}
+                        <div class="response with-image">
+                            <img class="thumb" src="{{ v.url }}" alt="Resposta da pergunta" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%22120%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22160%22 height=%22120%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%236b7280%22%3EImagem não encontrada%3C/text%3E%3C/svg%3E'" />
+                            <div class="response-content">
+                                <div class="response-label">{{ k }}</div>
+                                <div class="response-value" style="font-size: 12px; color: #6b7280; margin-bottom: 8px;">📁 {{ v.caminho }}</div>
+                                <a href="{{ v.url }}" target="_blank" class="response-link">🔗 Abrir em nova aba</a>
+                                <a href="{{ url_for('download_file', filename=v.caminho) }}" class="response-link" style="margin-left: 6px; background: linear-gradient(135deg, #10b981, #059669);">⬇️ Baixar</a>
+                            </div>
+                        </div>
+                    {% elif v is string and v.startswith('http') %}
+                        <div class="response with-image">
+                            <img class="thumb" src="{{ v }}" alt="Resposta da pergunta" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%22120%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22160%22 height=%22120%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%236b7280%22%3EImagem não encontrada%3C/text%3E%3C/svg%3E'" />
+                            <div class="response-content">
+                                <div class="response-label">{{ k }}</div>
+                                <a href="{{ v }}" target="_blank" class="response-link">🔗 Abrir em nova aba</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="response">
+                            <div class="response-content">
+                                <div class="response-label">{{ k }}</div>
+                                <div class="response-value">{{ v if v is string else v | join(', ') }}</div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
